@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <title>Voice Test</title>
+</head>
+<body>
+    <h1>Voice Test Page</h1>
+    <p>This page here is to check if voice is being accepted।</p>
+    <button id="speakButton" style="padding: 20px; font-size: 20px;">Click Me to Speak</button>
+
+    <script>
+        document.getElementById('speakButton').addEventListener('click', () => {
+            console.log("Speak button clicked!");
+            window.speechSynthesis.cancel();
+
+            const message = new SpeechSynthesisUtterance();
+            
+            message.text = "Hello, if you can hear this, your speech synthesis is working perfectly!";
+            message.lang = "en-US";
+            message.volume = 1;
+            message.rate = 1;
+            message.pitch = 1;
+
+            message.onerror = function(event) {
+                console.error('SpeechSynthesis Error:', event.error);
+                alert('Speech Synthesis Error: ' + event.error);
+            };
+
+            console.log("Calling window.speechSynthesis.speak()...");
+            window.speechSynthesis.speak(message);
+        });
+
+        window.speechSynthesis.onvoiceschanged = () => {
+            const voices = window.speechSynthesis.getVoices();
+            console.log("Available voices:", voices);
+            const englishVoice = voices.find(v => v.lang === 'en-US');
+            if(englishVoice) {
+                console.log("english voice found:", englishVoice.name);
+            } else {
+                console.warn("english (en-US) voice not found on this system.");
+            }
+        };
+    </script>
+</body>
+</html>
